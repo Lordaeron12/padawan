@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.forms.utils import ErrorList 
+from wagtail.wagtailadmin import messages
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailadmin.edit_handlers import (TabbedInterface, ObjectList,
@@ -9,6 +12,7 @@ from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Orderable
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailsearch import index
+
 
 class Category(Page):
     main_image = models.ForeignKey(
@@ -20,17 +24,27 @@ class Category(Page):
     )
     intro = models.CharField(max_length=250)
 
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
+
     content_panels = Page.content_panels + [
         ImageChooserPanel('main_image'),
         FieldPanel('intro'),
     ]
 
+    subpage_types = ['products.Category', 'products.Product']
+    parent_page_types = ['products.Category', 'main.MerchantPage']
+
 class Feature(models.Model):
-    name = models.CharField(max_length=15)
+    name = models.CharField('Nombre', max_length=15)
+    
+    class Meta:
+        verbose_name = "Característica"
+        verbose_name_plural = "Características"
 
     def __str__(self):
         return self.name
-
 
 class Picture(models.Model):
     image = models.ForeignKey(
@@ -40,37 +54,81 @@ class Picture(models.Model):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    caption = models.CharField(max_length=255, blank=True)
-
     panels = [
         ImageChooserPanel('image'),
-        FieldPanel('caption'),
     ]
-
-    class Meta:
-        abstract = True
 
 
 class ProductPicture(Orderable, Picture):
     page = ParentalKey('products.Product', related_name='pictures')
 
-
 class Variant(models.Model):
-    feature = models.ForeignKey(Feature, null=True, blank=True)
-    value = models.CharField(max_length=200)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    feature = models.ForeignKey(
+        Feature,
+        null=True,
+        blank=True,
+        help_text="Características para esta referencia. Ejemplo: Color"
+    )
+    value = models.CharField(
+        'Valor de característica',
+        max_length=200,
+        null=True,
+        blank=True,
+        help_text="Ejemplo: Si tu característica es 'Color', valor podría ser 'Verde'"
+    )
+    price = models.DecimalField('Precio', max_digits=10, decimal_places=2)
+    on_discount = models.BooleanField(
+        'En oferta',
+        default=False,
+        help_text="Activa esta opción si esta referencia está en oferta"
+    )
+    discount_percentage = models.PositiveIntegerField(
+        'Porcentaje de descuento',
+        null=True,
+        blank=True,
+        help_text="Si esta referencia está en oferta, ingresa el porcentaje de descuento"
+    )
     product = ParentalKey('products.Product', related_name='variants')
-    stock_quantity = models.IntegerField('In stock')
+    stock_quantity = models.IntegerField('Cantidad de stock')
+
+    class Meta:
+        verbose_name = "Referencia"
+        verbose_name_plural = "Referencias"
 
     def __str__(self):
         return self.name
 
     def get_stock(self):
         return self.stock
+    
+    def on_discount(self):
+        if discount_percentage is not None:
+            return True
+        else:
+            return False
 
+    def clean(self):
+        #Validate if there is feature but not value and viceversa
+        if self.feature and not self.value:
+            raise ValidationError({
+                'value': ValidationError('Asignale un valor a cada característica de tu referencia de producto. Ej: Verde', code='not_allowed'),
+            })
+        if self.value and not self.feature:
+            raise ValidationError({
+                'feature': ValidationError('Selecciona una característica para tu referencia de producto. Ej: Color', code='not_allowed'),
+            })
+        
+        #Validate if discount percentage is zero to override it to null as integrity requires it
+        if self.discount_percentage == 0:
+            self.discount_percentage = None
+            
 
 class Product(Page):
-    description = RichTextField()
+    description = RichTextField('Descripcion', help_text="Describe tu producto al público")
+
+    class Meta:
+        verbose_name = "Producto"
+        verbose_name_plural = "Productos"
 
     @property
     def name(self):
@@ -82,14 +140,20 @@ class Product(Page):
     content_panels = [
         FieldPanel('title'),
         FieldPanel('description'),
-        InlinePanel('pictures', label='Pictures')
+        InlinePanel('pictures', label='Imagenes')
     ]
     variant_panels = [
-        InlinePanel('variants', label='Variants')
+        InlinePanel('variants', label='Referencias')
     ]
 
     edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Product'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        ObjectList(variant_panels, heading='Variants')
+        ObjectList(content_panels, heading='Producto'),
+        ObjectList(variant_panels, heading='Referencias'),
+        ObjectList(Page.promote_panels, heading='SEO')
     ])
+
+    search_fields = Page.search_fields + [
+        index.SearchField('title'),
+    ]
+
+    subpage_types = []

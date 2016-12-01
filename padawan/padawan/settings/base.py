@@ -17,7 +17,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 PROJECT_APPS = [
-    'home',
+    'main',
     'products',
     'payment',
     'orders',
