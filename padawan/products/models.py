@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Min
 from django.forms.utils import ErrorList 
 from wagtail.wagtailadmin import messages
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailadmin.edit_handlers import (TabbedInterface, ObjectList,
                                                 PageChooserPanel, FieldPanel,
                                                 InlinePanel, MultiFieldPanel)
 from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailcore.models import Orderable
-from modelcluster.fields import ParentalKey
+from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
-
+from modelcluster.fields import ParentalKey
 
 class Category(Page):
     main_image = models.ForeignKey(
@@ -27,7 +26,10 @@ class Category(Page):
     class Meta:
         verbose_name = "Categoria"
         verbose_name_plural = "Categorias"
-
+    
+    def get_children_categories(self):
+        return self.get_children().type(Category).live().in_menu()
+       
     content_panels = Page.content_panels + [
         ImageChooserPanel('main_image'),
         FieldPanel('intro'),
@@ -35,6 +37,8 @@ class Category(Page):
 
     subpage_types = ['products.Category', 'products.Product']
     parent_page_types = ['products.Category', 'main.MerchantPage']
+
+
 
 class Feature(models.Model):
     name = models.CharField('Nombre', max_length=15)
@@ -130,9 +134,12 @@ class Product(Page):
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
 
-    @property
-    def name(self):
-        return self.title
+    def get_price(self):
+        minor_price_variant = self.get_variants().aggregate(Min('price'))
+        return minor_price_variant['price__min']
+    
+    def get_variants(self):
+        return Variant.objects.filter(product=self)
 
     def __str__(self):
         return self.name
