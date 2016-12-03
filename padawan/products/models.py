@@ -27,6 +27,12 @@ class Category(Page):
         verbose_name = "Categoria"
         verbose_name_plural = "Categorias"
     
+    def get_context(self, request):
+        context = super(Category, self).get_context(request)
+        context['product_list'] = Product.objects.live().descendant_of(self)
+        print context['product_list']
+        return context
+
     def get_children_categories(self):
         return self.get_children().type(Category).live().in_menu()
        
@@ -37,8 +43,7 @@ class Category(Page):
 
     subpage_types = ['products.Category', 'products.Product']
     parent_page_types = ['products.Category', 'main.MerchantPage']
-
-
+    template = 'products/category_detail.html'
 
 class Feature(models.Model):
     name = models.CharField('Nombre', max_length=15)
@@ -102,7 +107,7 @@ class Variant(models.Model):
         return self.name
 
     def get_stock(self):
-        return self.stock
+        return self.stock_quantity
     
     def on_discount(self):
         if discount_percentage is not None:
@@ -147,6 +152,12 @@ class Product(Page):
     
     def get_variants(self):
         return Variant.objects.filter(product=self)
+    
+    def get_stock(self):
+        stock = 0
+        for variant in self.get_variants():
+            stock = stock + variant.stock_quantity
+        return stock
 
     def __str__(self):
         return self.name
@@ -175,3 +186,4 @@ class Product(Page):
     ]
 
     subpage_types = []
+    template = "products/product_detail.html"

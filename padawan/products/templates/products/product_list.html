@@ -7,7 +7,7 @@
             {% for product in product_list %}
                 <div class="col-md-3 product-left"> 
                     <div class="p-one simpleCart_shelfItem">							
-                            <a href="{{product.get_url}}">
+                            <a href="{{product.url}}">
                                 {% image product.main_image fill-200x200 as product_logo %}
                                 <img src="{{product_logo.url}}" alt="" width="{{product_logo.width}}" height="{{ product_logo.height }}" />
                                 <div class="mask">
@@ -15,7 +15,7 @@
                                 </div>
                             </a>
                         <h4>{{product.title}}</h4>
-                        <p><a class="item_add" href="{{product.get_url}}"><i></i> <span class=" item_price">${{product.get_price|intcomma}}</span></a></p>
+                        <p><a class="item_add" href="{{product.url}}"><i></i> <span class=" item_price">${{product.get_price|intcomma}}</span></a></p>
                     </div>
                 </div>
             {% endfor %}

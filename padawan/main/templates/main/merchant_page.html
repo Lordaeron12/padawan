@@ -9,7 +9,7 @@
 				{% for slide in page.pictures.all %}
 					<li>
 						{% image slide.image original as slide_image %}
-						<div style="background: url('{{slide_image.url}}') no-repeat center; min-height: 700px; background-size: cover;"></div>
+						<div class="banner" style="background: url('{{slide_image.url}}') no-repeat center;"></div>
 					</li>
 				{% endfor %}
 			</ul>
@@ -25,10 +25,10 @@
 					<div class="col-md-6">
 						<div class="bnr-one">
 							<div class="bnr-left">
-								<h1><a href="{{category.get_url}}">{{category.title}}</a></h1>
+								<h1><a href="{{category.url}}">{{category.title}}</a></h1>
 								<p>{{category.intro}}</p>
 								<div class="b-btn"> 
-									<a href="{{category.get_url}}">Compra ahora</a>
+									<a href="{{category.url}}">Compra ahora</a>
 								</div>
 							</div>
 							<div class="bnr-right"> 

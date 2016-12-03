@@ -7,6 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 body{
 	background:#fff;
 	font-family: 'Alegreya Sans SC', sans-serif;
+	font-size: 1.66rem;
 }
 body a{
 	transition: 0.5s all;
@@ -31,7 +32,7 @@ body a{
 	font-family: 'Lato', sans-serif;
 }
 .search-bar input[type="submit"] {
-	background: url(../images/search.png)no-repeat 0px 0px;
+	background: url(/static/img/search.png)no-repeat 0px 0px;
 	outline: none;
 	-webkit-appearance: none;
 	border: 0;
@@ -120,28 +121,9 @@ a.simpleCart_empty {
 }
 /*--end-bottom-header--*/
 /*--banner-starts--*/
-.banner-1{
-	background:url(../images/banner.jpg) no-repeat center;
+.banner {
 	min-height:700px;
-	background-size:cover;
-	-webkit-background-size:cover;
-	-moz-background-size:cover;
-	-o-background-size:cover;
-	-ms-background-size:cover;
-}
-.banner-2{
-	background:url(../images/banner-3.jpg) no-repeat;
-	min-height:700px;
-	background-size:cover;
-	-webkit-background-size:cover;
-	-moz-background-size:cover;
-	-o-background-size:cover;
-	-ms-background-size:cover;
-}
-.banner-3{
-	background:url(../images/banner-2.jpg) no-repeat center;
-	min-height:700px;
-	background-size:cover;
+	background-size:cover !important;
 	-webkit-background-size:cover;
 	-moz-background-size:cover;
 	-o-background-size:cover;
@@ -422,7 +404,7 @@ ul.callbacks_tabs.callbacks2_tabs {
 	height: 28px;
 	border: none;
 	text-indent: 100%;
-	background: url(../images/top-arrow.png) no-repeat;
+	background: url(/static/img/top-arrow.png) no-repeat;
 } 
 /*--start-contact--*/
 .heading h3{
@@ -644,7 +626,7 @@ ol.breadcrumb {
 	color: #999;
 }
 .p-one p i {
-	background: url(../images/cart.png) no-repeat;
+	background: url(/static/img/cart.png) no-repeat;
 	width: 25px;
 	height: 18px;
 	display: inline-block;
@@ -652,7 +634,7 @@ ol.breadcrumb {
 	vertical-align: middle;
 }
 .product-left:hover .p-one p i{
-	background: url(../images/cart-2.png) no-repeat;
+	background: url(/static/img/cart-2.png) no-repeat;
 }
 /*--end-product--*/
 /*--start-checkout--*/

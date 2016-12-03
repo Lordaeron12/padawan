@@ -9,7 +9,7 @@ class Order(models.Model):
         ('DL', 'Enviada'),
         ('CA', 'Cancelada'),
     )
-
+    session_id = models.CharField(max_length=255, null=True)
     buyer_id = models.CharField(max_length=25)
     buyer_name = models.CharField(max_length=150)
     buyer_phone = models.CharField(max_length=12)

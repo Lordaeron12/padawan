@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/flexslider.css' %}" type="text/css" media="screen" />
+{% endblock %}
+
+{% block content %}
+    <div class="single contact">
+		<div class="container">
+			<div class="single-main">
+				<div class="col-sm-12 single-main-left">
+                    <div class="sngl-top">
+                        <div class="col-md-5 single-top-left">	
+                            <div class="flexslider">
+                                <ul class="slides">
+                                    {% for picture in page.pictures.all %}
+                                        {% image picture.image width-800 as product_image %}
+                                        {% image picture.image fill-80x80 as product_thumbnail %}
+                                        <li data-thumb="{{product_thumbnail.url}}">
+                                            <img src="{{product_image.url}}" />
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-7 single-top-right">
+                            <div class="details-left-info simpleCart_shelfItem">
+                                <h3>{{page.title}}</h3>
+                                <p class="availability">Disponibilidad: <span class="color">{% if page.get_stock > 0 %}En stock {% else %} Agotado {% endif %}</span></p>
+                                <div class="price_single">
+                                    <!--
+                                    <span class="reducedfrom">${{page.get_price|intcomma}}</span>-->
+                                    <span class="actual item_price">${{page.get_price|intcomma}}</span>
+                                </div>
+                                <h2 class="quick">Descripción:</h2>
+                                {{ page.description|richtext }}
+                            
+                                    <ul class="size">
+                                        <h3>{{page.get_variants.last.feature}}</h3>
+                                        {% for reference in page.get_variants %}
+                                            <li><a href="#">{{reference.value}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                <div class="quantity_box">
+                                    <ul class="product-qty">
+                                        <span>Cantidad:</span>
+                                        <select>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                        </select>
+                                    </ul>
+                                </div>
+                                <div class="clearfix"> </div>
+                                <div class="single-but item_add">
+                                    <input type="submit" value="Agregar al carrito"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+    </div>
+    {% include 'products/product_list.html' %}
+{% endblock %}
+{% block extra_js %}
+    <script defer src="{% static 'js/jquery.flexslider.js' %}"></script>
+    <script>
+        $(window).load(function() {
+            $('.flexslider').flexslider({
+                animation: "slide",
+                controlNav: "thumbnails"
+            });
+        });
+    </script>
+</script>
+{% endblock %}
