@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load wagtailimages_tags %}
+
 {% block content %}
     <div class="bnr" id="home">
 		<div  id="top" class="callbacks_container">
 			<ul class="rslides" id="home_slider">
-			    <li>
-					<div class="banner-1"></div>
-				</li>
-				<li>
-					<div class="banner-2"></div>
-				</li>
-				<li>
-					<div class="banner-3"></div>
-				</li>
+				{% for slide in page.pictures.all %}
+					<li>
+						{% image slide.image original as slide_image %}
+						<div style="background: url('{{slide_image.url}}') no-repeat center; min-height: 700px; background-size: cover;"></div>
+					</li>
+				{% endfor %}
 			</ul>
 		</div>
 		<div class="clearfix"> </div>
@@ -22,36 +21,24 @@
 	<div class="banner-bottom">
 		<div class="container">
 			<div class="banner-bottom-top">
-				<div class="col-md-6 banner-bottom-left">
-					<div class="bnr-one">
-						<div class="bnr-left">
-							<h1><a href="single.html">Duis dictum volutpat</a></h1>
-							<p>Nulla tempus facilisis purus at.</p>
-							<div class="b-btn"> 
-								<a href="single.html">SHOP NOW</a>
+				{% for category in random_categories %}
+					<div class="col-md-6">
+						<div class="bnr-one">
+							<div class="bnr-left">
+								<h1><a href="{{category.get_url}}">{{category.title}}</a></h1>
+								<p>{{category.intro}}</p>
+								<div class="b-btn"> 
+									<a href="{{category.get_url}}">Compra ahora</a>
+								</div>
 							</div>
-						</div>
-						<div class="bnr-right"> 
-							<a href="single.html"><img src="images/b-1.jpg" alt="" /></a>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-				</div>
-				<div class="col-md-6 banner-bottom-right">
-					<div class="bnr-two">
-						<div class="bnr-left">
-							<h2><a href="single.html">Phasellus quis nunc</a></h2>
-							<p>Nulla tempus facilisis purus at.</p>
-							<div class="b-btn"> 
-								<a href="single.html">SHOP NOW</a>
+							<div class="bnr-right"> 
+								 {% image category.main_image width-200 as category_logo %}
+								<a href="single.html"><img src="{{category_logo.url}}" alt="Imagen {{category.title}}" /></a>
 							</div>
+							<div class="clearfix"> </div>
 						</div>
-						<div class="bnr-right"> 
-							<a href="single.html"><img src="images/b-2.jpg" alt="" /></a>
-						</div>
-						<div class="clearfix"> </div>
 					</div>
-				</div>
+				{% endfor %}
 				<div class="clearfix"> </div>
 			</div>
 		</div>
@@ -60,7 +47,7 @@
 
     {% include 'products/product_list.html' %}
 {% endblock %}
-{% block extr_js %}
+{% block extra_js %}
 <script src="{% static 'js/responsiveslides.min.js' %}"></script>
 <script>
     $("#home_slider").responsiveSlides({
@@ -68,13 +55,7 @@
         pager: true,
         nav: false,
         speed: 500,
-        namespace: "callbacks",
-        before: function () {
-            $('.events').append("<li>before event fired.</li>");
-        },
-        after: function () {
-            $('.events').append("<li>after event fired.</li>");
-        }
+        namespace: "callbacks"
     });
 </script>
 {% endblock %}

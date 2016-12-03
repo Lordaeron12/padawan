@@ -62,7 +62,6 @@ class Picture(models.Model):
         ImageChooserPanel('image'),
     ]
 
-
 class ProductPicture(Orderable, Picture):
     page = ParentalKey('products.Product', related_name='pictures')
 
@@ -129,6 +128,14 @@ class Variant(models.Model):
 
 class Product(Page):
     description = RichTextField('Descripcion', help_text="Describe tu producto al público")
+    main_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text="Imagen principal de tu producto",
+        related_name='+'
+    )
 
     class Meta:
         verbose_name = "Producto"
@@ -147,14 +154,18 @@ class Product(Page):
     content_panels = [
         FieldPanel('title'),
         FieldPanel('description'),
-        InlinePanel('pictures', label='Imagenes')
+        ImageChooserPanel('main_image')
     ]
     variant_panels = [
         InlinePanel('variants', label='Referencias')
     ]
+    images_panels = [
+        InlinePanel('pictures', label='Imagenes')
+    ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Producto'),
+        ObjectList(images_panels, heading='Imagenes'),
         ObjectList(variant_panels, heading='Referencias'),
         ObjectList(Page.promote_panels, heading='SEO')
     ])
