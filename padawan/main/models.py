@@ -63,6 +63,7 @@ class MerchantPage(Page):
     subpage_types = ['products.Category']
 
     content_panels = [
+        FieldPanel('title'),
         ImageChooserPanel('logo')
     ]
     main_slide_panels = [

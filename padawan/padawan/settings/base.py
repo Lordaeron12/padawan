@@ -30,6 +30,7 @@ PROJECT_APPS = [
 THIRD_PARTY_APPS =[
     'modelcluster',
     'taggit',
+    'payu'
 ]
 
 WAGTAIL_APPS = [
@@ -129,3 +130,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 WAGTAIL_SITE_NAME = "Padawan"
+
+PAYU_MERCHANT_KEY = "544441",
+
+PAYU_MERCHANT_SALT = "10741012370",
+
+# And add the PAYU_MODE to 'TEST' for testing and 'LIVE' for production.
+PAYU_MODE = "TEST"
