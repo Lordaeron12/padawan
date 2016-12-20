@@ -104,7 +104,7 @@ class Variant(models.Model):
         verbose_name_plural = "Referencias"
 
     def __str__(self):
-        return self.name
+        return "{} {}".format(self.product.title, self.feature.name)
 
     def get_stock(self):
         return self.stock_quantity

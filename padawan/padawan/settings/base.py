@@ -12,17 +12,16 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 # Application definition
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 PROJECT_APPS = [
+    'users',
     'main',
     'products',
     'payment',
     'orders',
     'notifications',
-    'users',
     'search',
     'dashboard'
 ]
@@ -30,7 +29,6 @@ PROJECT_APPS = [
 THIRD_PARTY_APPS =[
     'modelcluster',
     'taggit',
-    'payu'
 ]
 
 WAGTAIL_APPS = [
@@ -61,6 +59,14 @@ DJANGO_APPS = [
 
 INSTALLED_APPS = PROJECT_APPS + THIRD_PARTY_APPS + WAGTAIL_APPS + DJANGO_APPS
 
+ROOT_URLCONF = 'padawan.urls'
+
+WSGI_APPLICATION = 'padawan.wsgi.application'
+
+WAGTAIL_SITE_NAME = "Padawan"
+
+AUTH_USER_MODEL = 'users.User'
+#Middlewares
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,8 +81,7 @@ MIDDLEWARE = [
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
 ]
 
-ROOT_URLCONF = 'padawan.urls'
-
+#Template config
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -97,10 +102,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'padawan.wsgi.application'
 
 # Internationalization
-
 LANGUAGE_CODE = 'es-CO'
 
 TIME_ZONE = 'America/Bogota'
@@ -112,8 +115,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files
-
+# Statics config
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -129,11 +131,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-WAGTAIL_SITE_NAME = "Padawan"
 
-PAYU_MERCHANT_KEY = "544441",
-
-PAYU_MERCHANT_SALT = "10741012370",
-
-# And add the PAYU_MODE to 'TEST' for testing and 'LIVE' for production.
-PAYU_MODE = "TEST"
+#PayU config
+PAYU_SANDBOX_MODE = True # Set to True for testing and False for production.

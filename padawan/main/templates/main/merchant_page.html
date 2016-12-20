@@ -3,59 +3,121 @@
 {% load wagtailimages_tags %}
 
 {% block content %}
-    <div class="bnr" id="home">
-		<div  id="top" class="callbacks_container">
-			<ul class="rslides" id="home_slider">
-				{% for slide in page.pictures.all %}
-					<li>
-						{% image slide.image original as slide_image %}
-						<div class="banner" style="background: url('{{slide_image.url}}') no-repeat center;"></div>
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-		<div class="clearfix"> </div>
-	</div>
-   
-    <!--start-banner-bottom--> 
-	<div class="banner-bottom">
-		<div class="container">
-			<div class="banner-bottom-top">
-				{% for category in random_categories %}
-					<div class="col-md-6">
-						<div class="bnr-one">
-							<div class="bnr-left">
-								<h1><a href="{{category.url}}">{{category.title}}</a></h1>
-								<p>{{category.intro}}</p>
-								<div class="b-btn"> 
-									<a href="{{category.url}}">Compra ahora</a>
-								</div>
-							</div>
-							<div class="bnr-right"> 
-								 {% image category.main_image width-200 as category_logo %}
-								<a href="single.html"><img src="{{category_logo.url}}" alt="Imagen {{category.title}}" /></a>
-							</div>
-							<div class="clearfix"> </div>
-						</div>
+	<div id="homeCarousel" class="carousel slide carousel-ugy">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+			{% for slide in page.pictures.all %}
+				<li data-target="#homeCarousel" data-slide-to="{{forloop.counter0}}" class="{% if forloop.first %} active {% endif %}"></li>
+			{% endfor %}
+			</ol>
+			<!-- Wrapper for Slides -->
+			<div class="carousel-inner">
+			{% for slide in page.pictures.all %}
+				<div class="item {% if forloop.first %} active {% endif %}">
+					{% image slide.image original as slide_image %}
+					<div class="fill" style="background-image:url('{{slide_image.url}}');"></div>
+					<div class="carousel-caption">
+						
 					</div>
-				{% endfor %}
-				<div class="clearfix"> </div>
-			</div>
+				</div>
+			{% endfor %}
 		</div>
-	</div>
-	<!--end-banner-bottom--> 
+		<!-- Controls -->
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
+	</div> 
 
-    {% include 'products/product_list.html' %}
+   <div class="container">
+		<section>
+			<article class="title-home">
+				<div class="border-left"></div>
+				<h1 class="text-center">Los últimos lanzamientos</h1>
+				<div class="border-right"></div>
+			</article>
+
+			<div id="owl-last-products" class="owl-carousel owl-theme">
+				{% include 'products/product_list.html' %}
+			</div>
+		</section>
+
+		<section>
+			<article class="title-home">
+				<div class="border-left"></div>
+				<h1 class="text-center">Presentación ugy</h1>
+				<div class="border-right"></div>
+			</article>
+			
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<div class="embed-responsive embed-responsive-16by9">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/bM7SZ5SBzyY" frameborder="0" allowfullscreen></iframe>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="embed-responsive embed-responsive-16by9">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/bM7SZ5SBzyY" frameborder="0" allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<article class="title-home">
+				<div class="border-left"></div>
+				<h1 class="text-center">Galeria instragram</h1>
+				<div class="border-right"></div>
+			</article>
+			
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-lg-3">                    
+					<div class="content-instragram">
+					<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:36.5277777778% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/BM9qHs_gYa-/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">Baseball cap tubular (Última en esta referencia) 👽⚡️ enamórate de la moda ⚡️pocas unidades 🔺info: +57 3134931600 #UGYSHOP</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">Una foto publicada por ÜGY 👽⚡️CLOTHING SHOP. (@ugyshop) el <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2016-11-18T19:34:42+00:00">18 de Nov de 2016 a la(s) 11:34 PST</time></p></div></blockquote>
+					<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+					</div>                     
+				</div>
+				<div class="col-xs-12 col-sm-6 col-lg-3">
+					<div class="content-instragram">                   
+					<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:38.1944444444% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/BM9qCQHgZKQ/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">Baseball cap tubular (Última en esta referencia) 👽⚡️ enamórate de la moda ⚡️pocas unidades 🔺info: +57 3134931600 #UGYSHOP</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">Una foto publicada por ÜGY 👽⚡️CLOTHING SHOP. (@ugyshop) el <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2016-11-18T19:33:57+00:00">18 de Nov de 2016 a la(s) 11:33 PST</time></p></div></blockquote>
+					<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+					</div>                    
+				</div>
+				<div class="col-xs-12 col-sm-6 col-lg-3">
+					<div class="content-instragram">
+					<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:38.1481481481% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/BMzhINvAqKb/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">Baseball cap tubular (Última en esta referencia) 👽⚡️ enamórate de la moda ⚡️pocas unidades 🔺info: +57 3134931600 #UGYSHOP</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">Una foto publicada por ÜGY 👽⚡️CLOTHING SHOP. (@ugyshop) el <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2016-11-14T21:03:43+00:00">14 de Nov de 2016 a la(s) 1:03 PST</time></p></div></blockquote>
+					<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+					</div>                    
+				</div>
+				<div class="col-xs-12 col-sm-6 col-lg-3">
+					<div class="content-instragram">                   
+					<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:33.2407407407% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/BMzg397APSV/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">SnapBack plana 👽⚡️ enamórate de la moda ⚡️pocas unidades 🔺info: +57 3134931600 #UGYSHOP</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">Una foto publicada por ÜGY 👽⚡️CLOTHING SHOP. (@ugyshop) el <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2016-11-14T21:01:30+00:00">14 de Nov de 2016 a la(s) 1:01 PST</time></p></div></blockquote>
+						<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+					</div>                     
+				</div>
+			</div>
+		</section>
+	</div>
 {% endblock %}
 {% block extra_js %}
-<script src="{% static 'js/responsiveslides.min.js' %}"></script>
-<script>
-    $("#home_slider").responsiveSlides({
-        auto: true,
-        pager: true,
-        nav: false,
-        speed: 500,
-        namespace: "callbacks"
-    });
-</script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<script>
+		$(document).ready(function() { 
+			var owl = $("#owl-last-products"); 
+			owl.owlCarousel({     
+				itemsCustom : [
+					[0, 1],
+					[450, 2],
+					[1200, 3]
+				],
+				navigation : true,
+				navigationText: [
+					"<i class='fa fa-angle-left' aria-hidden='true'></i>",
+					"<i class='fa fa-angle-right' aria-hidden='true'></i>"
+				] 
+			});
+		});
+	</script>
 {% endblock %}
