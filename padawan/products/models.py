@@ -115,6 +115,9 @@ class Variant(models.Model):
         else:
             return False
 
+    def get_reference(self):
+        return 'UG_{}'.format(self.pk)
+
     def clean(self):
         #Validate if there is feature but not value and viceversa
         if self.feature and not self.value:
@@ -146,12 +149,12 @@ class Product(Page):
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
 
-    def get_price(self):
-        minor_price_variant = self.get_variants().aggregate(Min('price'))
-        return minor_price_variant['price__min']
-    
+    def get_cheapest_variant(self):
+        cheapest_variant = self.get_variants().order_by('-price')[0]
+        return cheapest_variant
+
     def get_variants(self):
-        return Variant.objects.filter(product=self)
+        return Variant.objects.filter(product=self).order_by('value')
     
     def get_stock(self):
         stock = 0

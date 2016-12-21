@@ -1,17 +1,25 @@
 {% load humanize %}
 {% load wagtailimages_tags %}
-{% for product in product_list %}
-    <div class="item-carousel">
-        <div class="card">
-            {% image product.main_image fill-400x400 as product_logo %}
-            <div class="card-img-top" style="background-image: url({{product_logo.url}});"></div>
-            <div class="card-block">
-                <h4 class="card-title">{{product.title}}</h4>
-                <div class="text-center">
-                    <p class="card-text">${{product.get_price|intcomma}}</p>
-                    <a href="{{product.url}}" class="btn-carShopping item_add">Agradir al carrito</a>
+<ul class="row">
+    {% for product in product_list %}
+        <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card">
+                <a href="{{product.url}}">
+                    {% image product.main_image fill-400x400 as product_logo %}
+                    <div class="card-img-top" style="background-image: url({{product_logo.url}});"></div>
+                </a>
+                <div class="card-block">
+                    <h4 class="card-title truncate">
+                        <a href="{{product.url}}">{{product.title}}</a>
+                    </h4>
+                    <p>
+                        <span>Ref. {{product.get_cheapest_variant.get_reference}}</span>
+                    </p>
+                    <p class="card-text">
+                        <a href="{{product.url}}">${{product.get_cheapest_variant.price|intcomma}}</a>
+                    </p>                              
                 </div>
             </div>
-        </div>
-    </div>
-{% endfor %}
+        </li>
+    {% endfor %}
+</ul>

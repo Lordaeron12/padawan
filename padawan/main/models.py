@@ -9,17 +9,6 @@ from products.models import Product, Category
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 
 @register_setting
-class SocialMediaSettings(BaseSetting):
-    facebook = models.URLField(help_text='URl a tu página de Facebook')
-    instagram = models.CharField(max_length=255, help_text='Tu usuario de Instagram, sin el @')
-    twitter = models.CharField(max_length=255, help_text='Tu usuario de Twitter, sin el @')
-    youtube = models.URLField(help_text='URL a tu canal de Youtube')
-
-    class Meta:
-        verbose_name = 'Cuenta de red social'
-        verbose_name = 'Cuentas de redes sociales'
-
-@register_setting
 class PayUSettings(BaseSetting):
     merchant_id = models.CharField(max_length=255, help_text='Tu id de comercio de PayU')
     account_id = models.CharField(max_length=255, help_text='Tu id de cuenta de PayU')
@@ -30,6 +19,60 @@ class PayUSettings(BaseSetting):
         verbose_name = 'Configuracion PayU'
         verbose_name = 'Configuraciones PayU'
 
+class ContactConfig(models.Model):
+    city = models.CharField(
+        'Ciudad',
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    tel_number = models.CharField(
+        "Número telefónico",
+        max_length=25,
+        blank=True,
+        null=True
+    )
+    email = models.EmailField(
+        "Correo electrónico",
+        blank=True,
+        null=True,
+        help_text='Si quieres cambiar el correo predeterminado de notificaciones, cambia tu email de cuenta'
+    )
+    
+    panels = [
+        FieldPanel('city'),
+        FieldPanel('tel_number'),
+        FieldPanel('email'),
+    ]
+
+class SocialMediaLink(models.Model):
+    SOCIAL_NETWORK_CHOICES = (
+        ('facebook', 'Facebook'),
+        ('twitter', 'Twitter'),
+        ('instagram', 'Instagram'),
+        ('youtube', 'Youtube'),
+        ('snapchat', 'Snapchat'),
+        ('pinterest', 'Pinterest'),
+        ('googleplus', 'Google +'),
+    )
+    network = models.CharField(
+        max_length=15,
+        choices=SOCIAL_NETWORK_CHOICES,
+        default="facebook", 
+        blank=True,
+        null=True
+    )
+    link = models.URLField(
+        "Enlace a la red social",
+        blank=True,
+        null=True
+    )
+    
+    panels = [
+        FieldPanel('network'),
+        FieldPanel('link'),
+    ]
+
 class Picture(models.Model):
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -38,12 +81,38 @@ class Picture(models.Model):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    title = models.CharField(
+        'Título',
+        max_length = 50,
+        null = True,
+        blank = True
+    )
+    description = models.CharField(
+        'Descripción',
+        max_length = 150,
+        null = True,
+        blank = True
+    )
+    link = models.URLField(
+        null = True,
+        blank = True
+    )
+
     panels = [
         ImageChooserPanel('image'),
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('link'),
     ]
 
-class MerchantPagePicture(Orderable, Picture):
-    page = ParentalKey('main.MerchantPage', related_name='pictures')
+class MerchantPageSlidePicture(Orderable, Picture):
+    page = ParentalKey('main.MerchantPage', related_name='related_slide_pictures')
+
+class MerchantPageRelatedSocialMediaLink(Orderable, SocialMediaLink):
+    page = ParentalKey('main.MerchantPage', related_name='related_social_media_links')
+
+class MerchantPageRelatedContactConfig(Orderable, ContactConfig):
+    page = ParentalKey('main.MerchantPage', related_name='related_contact_config')
 
 class MerchantPage(Page):
     logo = models.ForeignKey(
@@ -67,11 +136,19 @@ class MerchantPage(Page):
         ImageChooserPanel('logo')
     ]
     main_slide_panels = [
-        InlinePanel('pictures', label='Slide principal')
+        InlinePanel('related_slide_pictures', label='Slide principal')
+    ]
+    social_panels = [
+        InlinePanel('related_social_media_links', label='Redes sociales')
+    ]
+    contact_panels = [
+        InlinePanel('related_contact_config', label='Contacto')
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Configuración general'),
         ObjectList(main_slide_panels, heading='Slide principal'),
+        ObjectList(social_panels, heading='Redes sociales'),
+        ObjectList(contact_panels, heading='Contacto'),
         ObjectList(Page.promote_panels, heading='SEO')
     ])

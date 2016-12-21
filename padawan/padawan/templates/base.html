@@ -15,18 +15,14 @@
         
 
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
-        <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css' %}" />
-        <link rel="stylesheet" type="text/css" href="{% static 'css/owl.transitions.css' %}" />
+        
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
         <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}">
-
-        
-        <link href="{% static 'css/padawan.css' %}" rel="stylesheet" />
-
         {% block extra_css %}
 
         {% endblock %}
+         <link href="{% static 'css/padawan.css' %}" rel="stylesheet" />
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
@@ -43,17 +39,18 @@
                             <span class="icon-bar"></span>
                         </button>
                         {% image page.get_site.root_page.specific.logo width-100 as root_logo %}
-                        <a href="#" class="brand-logo" style="background-image: ({{root_logo.url}})"></a>
+                        <a href="/" class="brand-logo" style="background-image: url({{root_logo.url}})"></a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="menu">
                         <div class="container wrapper">
                             <ul class="nav nav-pills">
-                                <li><a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-snapchat-square" aria-hidden="true"></i></a></li>
+                                {% if page.get_site.root_page.specific.related_social_media_links.all %}
+                                    {% for network in page.get_site.root_page.specific.related_social_media_links.all %}
+                                        <li><a href="{{network.link}}" target="_blank"><i class="fa fa-{{network.network}}" aria-hidden="true"></i></a></li>
+                                    {% endfor %}
+                                {% endif %}
                             </ul>
                         </div>
                         <ul class="nav navbar-nav">
@@ -87,11 +84,11 @@
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="drop"> 
-                                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 
-                                <span class="badge">0</span>
+                                    <span class="fa fa-shopping-basket" aria-hidden="true"></span> 
+                                    <span class="badge">0</span>
                                 </a>
                                 <ul class="dropdown-menu shopping-cart">
-                                <li><span>Tu carrito está vacio</span></li>
+                                    <li><span>Tu carrito está vacio</span></li>
                                 </ul>
                             </li>                     
                         </ul>                 
@@ -102,7 +99,7 @@
         {% endblock %}
         {% wagtailuserbar %}
 
-        <main>
+        <main {% block main_class %}{% endblock %}>
             {% block content %}{% endblock %}
         </main>
         {% block footer %}
@@ -114,15 +111,16 @@
                                 <h4>Compras seguras online con:</h4>
                                 <img src="{% static 'img/PayU.png' %}" class="img-responsive img-payU">
                             </div>
-                            <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-1">
-                                <h4>Siguenos en:</h4>
-                                <ul class="nav nav-pills social-media">
-                                    <li><a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-snapchat-square" aria-hidden="true"></i></a></li>
-                                </ul>
-                            </div>
+                            {% if page.get_site.root_page.specific.related_social_media_links.all %}
+                                <div class="col-xs-12 col-md-4 col-lg-3 col-lg-offset-1">
+                                    <h4>Siguenos en:</h4>
+                                    <ul class="nav nav-pills social-media">
+                                        {% for network in page.get_site.root_page.specific.related_social_media_links.all %}
+                                            <li><a href="{{network.link}}" target="_blank"><i class="fa fa-{{network.network}}" aria-hidden="true"></i></a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
                             <div class="col-xs-12 col-md-4 col-lg-4">
                                 <h4>Políticas</h4>
                             <ul class="nav nav-pills nav-stacked nav-politicas">
@@ -141,24 +139,25 @@
                                 <p class="left">Copyright © {% now "Y" %} Achieved with Padawan by <a href="http://apptitud.com.co/" target="_blank">Apptitud</a></p>
                             </div>
                             <div class="col-xs-12 col-sm-6">
-                                <p class="right">323 23 45 Pereira- Línea Nacional 018000123456</p>
+                                {% for contact_item in page.get_site.root_page.specific.related_contact_config.all %}
+                                    <p class="right">Tel: {{contact_item.tel_number}}, {{contact_item.city}}</p>
+                                {% endfor %}
                             </div>  
                         </div>
                     </div>
                 </div>
             </footer>  
         {% endblock %}
-        {# Global javascript #}
         <script
             src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
             crossorigin="anonymous">
         </script>
         <script src="{% static 'js/bootstrap.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/padawan.js' %}"></script>
         {% block extra_js %}
             
         {% endblock %}
+        <script type="text/javascript" src="{% static 'js/padawan.js' %}"></script>
     </body>
 </html>
 	

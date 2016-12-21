@@ -134,3 +134,14 @@ MEDIA_URL = '/media/'
 
 #PayU config
 PAYU_SANDBOX_MODE = True # Set to True for testing and False for production.
+
+#CACHE config
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': '127.0.0.1:6379',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}

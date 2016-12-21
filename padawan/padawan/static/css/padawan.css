@@ -50,6 +50,7 @@ main {
 	background-color: #000;
 	color: #fff;
 	display: inline-block;
+	font-weight: 600;
 	border:1px;
 }
 	.btn-carShopping i{
@@ -84,8 +85,6 @@ main {
 	text-align: center;
 	margin: 2rem 0;
 }
-}
-
 
 .carousel,
 .item {
@@ -108,10 +107,10 @@ main {
 	}
 
 .carousel-ugy .carousel-caption{
-   	left: 15%;
-   	top: 15%;
-    text-align: left;
-    width: 50%;
+   left: 15%;
+   top: 15%;
+   text-align: left;
+   width: 50%;
 }
 	.carousel-ugy .carousel-caption h2{
 		font-size: 2em;
@@ -121,6 +120,9 @@ main {
 	.carousel-ugy .carousel-caption p{
 		font-size: 1.8em;
 	}
+.card{
+	
+}
 
 .card-img-top{
 	background-size: cover;
@@ -177,13 +179,14 @@ main {
 .content-shoppingList{
 	padding-top: 3rem;
 }
-	.content-shoppingList ul{	
-		padding-left: 0;
+	.content-shoppingList ul, .content-shoppingList2 ul{	
+		padding-left: 0;		
 	}
-		.content-shoppingList ul li{
+		.content-shoppingList ul li, .content-shoppingList2 ul li{
 			list-style: none;
+			padding-top: 2px;
+			padding-bottom: 2px;
 		}
-
 
 .divider-nav{
 	font-size: 2em;

@@ -5,91 +5,72 @@
 {% load wagtailcore_tags %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/flexslider.css' %}" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/pgwslider.css' %}" />
 {% endblock %}
 
+{% block main_class %}class="main"{% endblock %}
+
 {% block content %}
-    <div class="single contact">
-		<div class="container">
-			<div class="single-main">
-				<div class="col-sm-12 single-main-left">
-                    <div class="sngl-top">
-                        <div class="col-md-5 single-top-left">	
-                            <div class="flexslider">
-                                <ul class="slides">
-                                    {% for picture in page.pictures.all %}
-                                        {% image picture.image width-800 as product_image %}
-                                        {% image picture.image fill-80x80 as product_thumbnail %}
-                                        <li data-thumb="{{product_thumbnail.url}}">
-                                            <img src="{{product_image.url}}" />
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+    <div class="container">
+        <ul class="nav-category">
+            <li><a href="{{page.get_parent.url}}">{{page.get_parent}}</a></li>
+            <li>/</li>
+            <li>{{page.title}}</li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-12 col-md-7">              
+                <ul class="pgwSlider">
+                    {% for picture in page.pictures.all %}
+                        {% image picture.image width-800 as product_image %}
+                        <li>
+                            <img src="{{product_image.url}}" />
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-5 ">
+                <h1 class="card-text">{{page.title}}</h1>
+                <p><span>Ref. </span>{{page.get_cheapest_variant.get_reference}}</p><br/>                 
+                <p class="card-text"><span>${{page.get_cheapest_variant.price|intcomma}}</span></p>
+                <p>{{ page.description|richtext }}</p>
+                <form>
+                    <div class="select-element">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-10 col-lg-8">
+                                <label>Cantidad</label>
+                                <select class="form-control">
+                                    <option disabled>Cantidad</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select> 
                             </div>
                         </div>
-                        <div class="col-md-7 single-top-right">
-                            <div class="details-left-info simpleCart_shelfItem">
-                                <h3>{{page.title}}</h3>
-                                <p class="availability">Disponibilidad:
-                                    <span class="color">
-                                        {% if page.get_stock == 0  %}
-                                            Agotado
-                                        {% elif page.get_stock <= 3 %}
-                                            Últimas 3 unidades
-                                        {% elif page.get_stock > 3 %}
-                                            En stock
-                                        {% endif %}
-                                    </span>
-                                </p>
-                                <div class="price_single">
-                                    <!--
-                                    <span class="reducedfrom">${{page.get_price|intcomma}}</span>-->
-                                    <span class="actual item_price">$</span>
-                                </div>
-                                <h2 class="quick">Descripción:</h2>
-                                {{ page.description|richtext }}
-                                <div class="quantity_box">
-                                    <ul class="product-qty">
-                                        <span>{{page.get_variants.last.feature}}:</span>
-                                        <select name="variant_options" id="variant_options">
-                                            {% for reference in page.get_variants %}
-                                                <option value="{{reference.pk}}">{{reference.value}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </ul>
-                                    <ul class="product-qty">
-                                        <span>Cantidad:</span>
-                                        <select>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
-                                            <option>7</option>
-                                            <option>8</option>
-                                            <option>9</option>
-                                            <option>10</option>
-                                        </select>
-                                    </ul>
-                                </div>
-                                <div class="clearfix"> </div>
-                                <div class="single-but item_add">
-                                    <input type="submit" value="Agregar al carrito"/>
-                                </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-10 col-lg-8">
+                                <label>{{page.get_variants.last.feature}}</label>
+                                <select class="form-control" name="variant_options" id="variant_options"> 
+                                    <option disabled>{{page.get_variants.last.feature}}</option>                    
+                                    {% for reference in page.get_variants %}
+                                        <option value="{{reference.pk}}">{{reference.value}}</option>
+                                    {% endfor %}
+                                </select> 
                             </div>
                         </div>
                     </div>
-				</div>
-			</div>
-		</div>
+                    <button class="btn-carShopping">Agradir al carrito </button>
+                </form>
+            </div>
+        </div> 
     </div>
-    {% include 'products/product_list.html' %}
 {% endblock %}
+
 {% block extra_js %}
-    <script defer src="{% static 'js/jquery.flexslider.js' %}"></script>
+    <script src="{% static 'js/pgwslider.js' %}"></script>
     <script>
-        $(window).load(function() {
+        $(document).ready(function() {
             function get_product_variants(product_id) {
                 $.get(
                     "{% url 'get_product_variants' %}",
@@ -135,10 +116,6 @@
                 );
             }
 
-            $('.flexslider').flexslider({
-                animation: "slide",
-                controlNav: "thumbnails"
-            });
 
             //At ready, load selected variant, get and set price on view
             initialSelectedVariant = $('#variant_options').val();
@@ -147,6 +124,8 @@
                 variant = get_variant(initialSelectedVariant);
                 console.log(variant);
             }
+
+            $('.pgwSlider').pgwSlider({listPosition:"left",autoSlide:false});
             
         });
     </script>

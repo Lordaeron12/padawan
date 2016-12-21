@@ -1,32 +1,45 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% load wagtailimages_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.transitions.css' %}" />
+{% endblock %}
 
 {% block content %}
 	<div id="homeCarousel" class="carousel slide carousel-ugy">
-			<!-- Indicators -->
-			<ol class="carousel-indicators">
-			{% for slide in page.pictures.all %}
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			{% for slide in page.related_slide_pictures.all %}
 				<li data-target="#homeCarousel" data-slide-to="{{forloop.counter0}}" class="{% if forloop.first %} active {% endif %}"></li>
 			{% endfor %}
-			</ol>
-			<!-- Wrapper for Slides -->
-			<div class="carousel-inner">
-			{% for slide in page.pictures.all %}
-				<div class="item {% if forloop.first %} active {% endif %}">
+		</ol>
+		<!-- Wrapper for Slides -->
+		<div class="carousel-inner">
+			{% for slide in page.related_slide_pictures.all %}
+				<div class="item active">
 					{% image slide.image original as slide_image %}
 					<div class="fill" style="background-image:url('{{slide_image.url}}');"></div>
+					
 					<div class="carousel-caption">
-						
+						{% if slide.title and slide.description %}
+							<h2>{{slide.title}}</h2>
+							<p>{{slide.description}}</p>
+						{% endif %}
+						{% if slide.link %}
+							<a href="{{slide.link}}" target="_blank" class="btn-callAction">Ver <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+						{% endif %}
 					</div>
 				</div>
 			{% endfor %}
 		</div>
 		<!-- Controls -->
-		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+		<a class="left carousel-control" href="#homeCarousel" data-slide="prev">
 			<span class="icon-prev"></span>
 		</a>
-		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+		<a class="right carousel-control" href="#homeCarousel" data-slide="next">
 			<span class="icon-next"></span>
 		</a>
 	</div> 
@@ -40,7 +53,21 @@
 			</article>
 
 			<div id="owl-last-products" class="owl-carousel owl-theme">
-				{% include 'products/product_list.html' %}
+				{% for product in product_list %}
+					<div class="item-carousel">
+						<div class="card">
+							{% image product.main_image fill-400x400 as product_logo %}
+							<div class="card-img-top" style="background-image: url({{product_logo.url}});"></div>
+							<div class="card-block">
+								<h4 class="card-title">{{product.title}}</h4>
+								<div class="text-center">
+									<p class="card-text">${{product.get_cheapest_variant.price|intcomma}}</p>
+									<a href="{{product.url}}" class="btn-carShopping item_add">Añadir al carrito</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
 			</div>
 		</section>
 
