@@ -18,6 +18,8 @@
         
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css" />
+        
         <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}">
         {% block extra_css %}
 
@@ -75,11 +77,16 @@
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="user"> 
-                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
                                 </a>
                                 <ul class="dropdown-menu">
-                                <li><a href="/">Iniciar Sesión</a></li>
-                                <li><a href="/">Registrarse</a></li>
+                                    {% if request.user.is_authenticated %}
+                                        <li><p>Hola,<a href="#">{{request.user.first_name}}</a></li>
+                                        <li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                                        <li><a href="{% url 'signup' %}">Registrarse</a></li>
+                                    {% endif %}     
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -148,16 +155,49 @@
                 </div>
             </footer>  
         {% endblock %}
+        <div id="messages-modal"></div>
         <script
             src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
             crossorigin="anonymous">
         </script>
         <script src="{% static 'js/bootstrap.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js"></script>
         {% block extra_js %}
             
         {% endblock %}
         <script type="text/javascript" src="{% static 'js/padawan.js' %}"></script>
+        <script>
+            $(document).ready(function(){
+                {% if messages %}
+                    title = 'Proceso completado'
+                    timeout = 3000
+                    overlay = false
+                    {% for message in messages %}
+                        {% if message.tags == "success" %}
+                            color = '#8BC34A'
+                        {% elif message.tags == "warning" %}
+                            color = '#F44336'
+                            title = 'Ups, algo anda mal'
+                            timeout = 6000
+                            overlay = true
+                        {% else %}
+                            color = '#607D8B'
+                        {% endif %}
+                        $("#messages-modal").iziModal({
+                            title: title,
+                            subtitle: '{{message}}',
+                            headerColor: color,
+                            attached: 'bottom',
+                            zindex: 9999,
+                            timeout: timeout,
+                            overlay: overlay
+                        });
+                        $('#messages-modal').iziModal('open');
+                    {% endfor %}
+                {% endif %}
+            });
+        </script>
     </body>
 </html>
 	

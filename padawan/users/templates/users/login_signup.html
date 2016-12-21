@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <section>
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 col-md-9 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs row" role="tablist">
+                        <li role="presentation" class="{% if is_login %}active {% endif %}col-xs-6 text-center">
+                            <a href="{% url 'login' %}" >Iniciar Sesión</a>
+                        </li>
+                        <li role="presentation" class="{% if not is_login %}active {% endif %}col-xs-6 text-center">
+                            <a href="{% url 'signup' %}">Crear Cuenta</a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade {% if is_login %}in active{% endif %}" id="login">
+                            <form action="{% url 'login' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Correo Electrónico</label>
+                                        <input type="email" class="form-control" name="username" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Contraseña</label>
+                                        <input type="password" class="form-control" name="password" id="" placeholder="Contraseña">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a class="link-lower" href="#">
+                                        Olvidé mi contraseña
+                                    </a>
+                                    </div>
+                                </div>                                 
+                                <button type="submit" class="btn-singIn">Iniciar sesión</button>
+                            </form>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade {% if not is_login %}in active{% endif %}" id="sing-in">
+                            <form action="{% url 'signup' %}" method="POST">
+                                {% csrf_token %}
+                                <h3 class="title-data">Datos de usuario:</h3>
+                                <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Nombres </label>
+                                        <input type="text" class="form-control" name="first_name">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Apellidos</label>
+                                        <input type="text" class="form-control" name="last_name">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="">Telefóno</label>
+                                        <input type="number" class="form-control" name="telephone_number">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Tipo de documento</label>
+                                        <select class="form-control" name="id_type">
+                                            <option>CC</option>
+                                            <option>NIT</option>
+                                            <option>CE</option>
+                                            <option>TI</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="">Numero de documento</label>
+                                        <input type="number" class="form-control" name="id_number">
+                                    </div>
+                                </div>
+                                </div>
+                                <h3>Datos para inicio de sesión:</h3>
+                                <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="">Correo Electrónico</label>
+                                        <input type="email" class="form-control" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="">Contraseña</label>
+                                        <input type="password" class="form-control" name="password">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="">Repetir Contraseña</label>
+                                        <input type="password" class="form-control" name="password">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">Acepto los <a href="#"><strong>Términos y condiciones</strong></a>
+                                        </label>
+                                        </div>
+                                    </div>
+                                </div>                                 
+                                </div>                                 
+                                <button type="submit" class="btn-singIn">Regístrarse</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+    </div>
+{% endblock %}

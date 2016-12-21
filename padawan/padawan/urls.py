@@ -10,17 +10,18 @@ from wagtail.wagtailcore import urls as wagtail_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 
 from orders import urls as order_urls
+from users import urls as users_urls
+from users.views import LoginView, SignupView
 
 urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
-
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
-
     url(r'^search/$', search_views.search, name='search'),
-
     url(r'^orders/', include(order_urls)),
-
+    url(r'^signup/', SignupView.as_view(), name="signup"),
+    url(r'^login/', LoginView.as_view(), name="login"),
+    url(r'^users/', include(users_urls)),
     url(r'', include(wagtail_urls)),
 ]
 

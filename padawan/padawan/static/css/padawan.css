@@ -7,6 +7,8 @@
    	display: flex;
    	min-height: 100vh;
    	flex-direction: column;
+	background-image: url(/static/img/pattern.png);
+	background-repeat: repeat;
 }
 
 footer h4{
@@ -763,3 +765,7 @@ main {
 	}
 }
 
+.iziModal .iziModal-header-subtitle {
+    font-size: 15px !important;
+    line-height: 2 !important;
+}
