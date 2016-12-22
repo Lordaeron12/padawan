@@ -27,7 +27,6 @@ class LoginView(TemplateView):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.add_message(request, messages.SUCCESS, 'Bienvenido, ' + user.first_name)
                 return redirect('/')    
             else:
                 msg = 'Usuario o contraseña incorrectas'           
