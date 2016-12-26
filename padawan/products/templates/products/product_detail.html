@@ -33,25 +33,31 @@
                 <p><span>Ref. </span>{{page.get_cheapest_variant.get_reference}}</p><br/>                 
                 <p class="card-text"><span>${{page.get_cheapest_variant.price|intcomma}}</span></p>
                 <p>{{ page.description|richtext }}</p>
-                <form>
+                <form action="{% url 'add_to_cart' %}" method="POST">
+                    {% csrf_token %}
                     <div class="select-element">
                         <div class="row">
                             <div class="col-xs-12 col-md-10 col-lg-8">
                                 <label>Cantidad</label>
-                                <select class="form-control">
+                                <select class="form-control" id="quantity_options" name="quantity" required>
                                     <option disabled>Cantidad</option>
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
                                     <option>4</option>
                                     <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
                                 </select> 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-md-10 col-lg-8">
                                 <label>{{page.get_variants.last.feature}}</label>
-                                <select class="form-control" name="variant_options" id="variant_options"> 
+                                <select class="form-control" name="reference_id" id="variant_options"> 
                                     <option disabled>{{page.get_variants.last.feature}}</option>                    
                                     {% for reference in page.get_variants %}
                                         <option value="{{reference.pk}}">{{reference.value}}</option>
@@ -60,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn-carShopping">Agradir al carrito </button>
+                    <button class="btn-carShopping" id="add-to-cart">Agradir al carrito</button>
                 </form>
             </div>
         </div> 
@@ -97,32 +103,6 @@
                     } 
                 });
                 return result
-            }
-
-            function add_to_cart(is_temp, cart_id, variant_id, quantity, user) {
-                $.post(
-                    "{% url 'add_to_cart' %}",
-                    {
-                        is_temp: is_temp,
-                        cart_id: cart_id,
-                        variant_id: variant_id,
-                        quantity: quantity,
-                        user: user
-                    }
-                ).done(
-                    function(data) {
-                        console.log( "response @add_to_cart: " + data );
-                    }
-                );
-            }
-
-
-            //At ready, load selected variant, get and set price on view
-            initialSelectedVariant = $('#variant_options').val();
-
-            if (initialSelectedVariant) {
-                variant = get_variant(initialSelectedVariant);
-                console.log(variant);
             }
 
             $('.pgwSlider').pgwSlider({listPosition:"left",autoSlide:false});

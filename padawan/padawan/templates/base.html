@@ -163,11 +163,32 @@
         </script>
         <script src="{% static 'js/bootstrap.js' %}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js"></script>
-        {% block extra_js %}
-            
-        {% endblock %}
         <script type="text/javascript" src="{% static 'js/padawan.js' %}"></script>
         <script>
+            function get_user(){
+                if ('{{request.user.pk}}' != 'None') {
+                    return {{request.user.pk}}
+                } else {
+                    return null
+                }
+            }
+
+            function get_cart_id(){
+                user = get_user();
+                $.ajax({
+                    url: "{% url 'get_card_id' %}",
+                    type: 'get',
+                    async: false,
+                    data: {
+                        user_id: user
+                    },
+                    success: function(data) {
+                        result = data;
+                    } 
+                });
+                return result
+            }
+
             $(document).ready(function(){
                 {% if messages %}
                     title = 'Proceso completado'
@@ -199,6 +220,9 @@
                 {% endif %}
             });
         </script>
+        {% block extra_js %}
+            
+        {% endblock %}
     </body>
 </html>
 	

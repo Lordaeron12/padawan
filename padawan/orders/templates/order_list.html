@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="container">
+    <section>
+        <article class="title-main">
+            <h1>Carrito de compras</h1>
+        </article>
+        <article>
+            {% for items in order_items %}
+                <div class="row">
+                    <div class="col-xs-12 col-md-8">
+                        <div class="media">
+                            <div class="media-left media-top">
+                            <a href="#">
+                                <div class="media-object media-cart" style="background-image: url(../assets/img/1.jpg);"></div>
+                            </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading card-title"><a href="#">{{order.reference.product.titlre}}</a></h4>
+                                <p><span>Ref. ZA74EVT003-142-T0H38</span></p>
+                                <p><strong>Talla:</strong> M</p>
+                                <p><a href="#">Ver Producto</a> |  <a href="#">Eliminar</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-2 text-right">
+                        <p><span>Cantidad </span><strong>2</strong></p>
+                    </div>
+                    <div class="col-xs-12 col-md-2 text-right">
+                        <p class="price-cart"><span>$20.000</span></p>
+                    </div>
+                </div>
+                <div class="divider-row"></div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-xs-12 col-md-6 col-md-push-6">        
+                <p class="text-right value">
+                    <span>Subtotal (2 items):</span>
+                    <strong>$40.000</strong>
+                </p>
+                </div>
+                <div class="col-xs-12 col-md-6 col-md-pull-6">  
+                <button class="btn-carShopping">Continuar <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                </div>                     
+            </div>
+        </article>
+    </section>
+</div>

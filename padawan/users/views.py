@@ -20,7 +20,6 @@ class LoginView(TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        context = self.get_context_data()
         try:
             username = request.POST['username']
             password = request.POST['password']
@@ -37,8 +36,6 @@ class LoginView(TemplateView):
 
         return redirect('login')
 
-        return super(LoginView, self).render_to_response(context)
-
 class SignupView(TemplateView):
     template_name = "users/login_signup.html"
 
@@ -49,7 +46,6 @@ class SignupView(TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        context = self.get_context_data()
         redirect_url = 'signup'
         try:
             email = request.POST['email']
@@ -70,7 +66,7 @@ class SignupView(TemplateView):
             msg = 'Datos incompletos'
             tag = messages.WARNING
         except IntegrityError:
-            msg = 'Ya existe un usuario con el correo o númerio de identificación registrado'
+            msg = 'Ya existe un usuario con el correo o número de identificación registrado'
             tag = messages.WARNING
         except Exception as e:
             msg = 'Error al intentar registrarte: ' + str(e)
@@ -83,8 +79,6 @@ class SignupView(TemplateView):
         messages.add_message(request, tag, msg)
         
         return redirect(redirect_url)
-
-        return super(SignupView, self).render_to_response(context)
 
 def logout_user(request):
     logout(request)

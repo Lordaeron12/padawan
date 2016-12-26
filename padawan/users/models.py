@@ -15,4 +15,4 @@ class User(AbstractUser):
     id_number = models.CharField(max_length=15, null=True, blank=True, unique=True)
 
     def __str__(self):
-        return self.username
+        return self.get_full_name()

@@ -10,8 +10,8 @@ class OrderModelAdmin(ModelAdmin):
     menu_icon = 'plus'  
     menu_order = 200 
     add_to_settings_menu = False  #
-    list_display = ('__str__', 'buyer_id', 'buyer_name', 'buyer_phone', 'buyer_email', 'buyer_city', 'status')
-    search_fields = ('__str__','buyer_id', 'buyer_name',)
+    list_display = ('__str__', 'customer', 'status')
+    search_fields = ('__str__','customer__id_number', 'customer__first_name', 'customer__last_name')
 
 modeladmin_register(OrderModelAdmin)
 

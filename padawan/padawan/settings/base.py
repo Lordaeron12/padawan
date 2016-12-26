@@ -15,6 +15,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+ALLOWED_HOSTS = ['*']
+
 PROJECT_APPS = [
     'users',
     'main',
