@@ -17,6 +17,9 @@ sys.setdefaultencoding('utf-8')
 
 ALLOWED_HOSTS = ['*']
 
+SECRET_KEY = '3rsf0d&@7@in(ia4k%dyhrde(birxw2dn-_l$#y#wqz_qnkqgr'
+
+
 PROJECT_APPS = [
     'users',
     'main',
@@ -65,7 +68,7 @@ ROOT_URLCONF = 'padawan.urls'
 
 WSGI_APPLICATION = 'padawan.wsgi.application'
 
-WAGTAIL_SITE_NAME = "Padawan"
+WAGTAIL_SITE_NAME = "UgyShop"
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -134,10 +137,8 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 

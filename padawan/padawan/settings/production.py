@@ -9,7 +9,7 @@ try:
 except ImportError:
     pass
 
-BASE_URL = 'https://padawan.herokuapp.com'
+BASE_URL = 'https://www.ugyshop.com'
 
 DATABASES = {
     'default': {
@@ -17,3 +17,6 @@ DATABASES = {
         'NAME': 'padawan',
     }
 }
+
+MEDIA_ROOT = os.path.join('/home/django/media')
+STATIC_ROOT = os.path.join('/home/django/static')
