@@ -6,7 +6,7 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 import sys
-
+import raven
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -34,6 +34,7 @@ PROJECT_APPS = [
 THIRD_PARTY_APPS =[
     'modelcluster',
     'taggit',
+    'raven.contrib.django.raven_compat',
 ]
 
 WAGTAIL_APPS = [
@@ -154,4 +155,12 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
+}
+
+
+RAVEN_CONFIG = {
+    'dsn': 'https://32ffc687f1994394bd535ae9c80bad93:1aed4abbe8f7463899deefa8f38387bd@sentry.io/125020',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
 }

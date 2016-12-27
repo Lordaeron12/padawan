@@ -11,8 +11,10 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 
+from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "padawan.settings.dev")
+application = Sentry(get_wsgi_application())
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "padawan.settings.production")
 
-application = get_wsgi_application()
+application = Sentry(get_wsgi_application())
