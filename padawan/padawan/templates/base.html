@@ -42,6 +42,31 @@
                         </button>
                         {% image page.get_site.root_page.specific.logo width-100 as root_logo %}
                         <a href="/" class="brand-logo" style="background-image: url({{root_logo.url}})"></a>
+                        <ul class="nav nav-pills nav-dropdown">
+                            <li class="dropdown visible-xs">
+                                <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                {% if request.user.is_authenticated %}
+                                    <li>Hola, <a href="#">{{request.user.first_name}}</a></li>
+                                    <li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                                    <li><a href="{% url 'signup' %}">Registrarse</a></li>
+                                {% endif %}     
+                                </ul>
+                            </li>
+                            <li class="dropdown visible-xs">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 
+                                    <span class="badge">0</span>
+                                </a>
+                                <ul class="dropdown-menu shopping-cart">
+                                    <li><span>Tu carrito está vacio</span></li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -75,13 +100,13 @@
                                 </div>                     
                                 </form>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown hidden-xs">
                                 <a href="#" class="user"> 
                                     <i class="fa fa-user-circle" aria-hidden="true"></i>
                                 </a>
                                 <ul class="dropdown-menu">
                                     {% if request.user.is_authenticated %}
-                                        <li><p>Hola,<a href="#">{{request.user.first_name}}</a></li>
+                                        <li>Hola,<a href="#">{{request.user.first_name}}</a></li>
                                         <li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
                                     {% else %}
                                         <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
@@ -89,8 +114,8 @@
                                     {% endif %}     
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" class="drop"> 
+                            <li class="dropdown hidden-xs">
+                                <a href="#"> 
                                     <span class="fa fa-shopping-basket" aria-hidden="true"></span> 
                                     <span class="badge">0</span>
                                 </a>
